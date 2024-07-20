@@ -16,7 +16,6 @@ var CommandHandlers = map[string]func(s *discordgo.Session, i *discordgo.Interac
 				Data: &discordgo.InteractionResponseData{
 					Content: fmt.Sprintf(
 						"You picked %q autocompletion",
-						// Autocompleted options do not affect usual flow of handling application command. They are ordinary options at this stage
 						data.Options[0].StringValue(),
 					),
 				},

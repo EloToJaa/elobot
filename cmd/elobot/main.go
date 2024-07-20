@@ -41,11 +41,6 @@ func init() {
 
 	BotToken = os.Getenv("DISCORD_TOKEN")
 	GuildId = os.Getenv("DISCORD_GUILD_ID")
-
-	session, err = discordgo.New("Bot " + BotToken)
-	if err != nil {
-		log.Fatalf("Invalid bot parameters: %v", err)
-	}
 }
 
 func main() {
@@ -84,4 +79,47 @@ func main() {
 			}
 		}
 	}
+}
+
+func createDiscordSession(token string) *discordgo.Session {
+	session, err := discordgo.New("Bot " + token)
+	if err != nil {
+		log.Fatal("Error creating Discord session", err)
+	}
+
+	session.ShouldReconnectOnError = true // Not sure if this is needed
+	return session
+}
+
+func startBotHandlers(session *discordgo.Session) map[string]map[string]botsdef.Discord {
+	// bots := make(map[string]map[string]botsdef.Discord)
+
+	// guildIDs := []string{"123"}
+
+	// for _, id := range guildIDs {
+	// 	bots[id] = make(map[string]botsdef.Discord)
+
+	// 	prefix := "!"
+
+	// 	for _, module := range botsdef.Modules {
+	// 		botInstance := botsdef.CreateBotInstance(session, module)
+	// 		if botInstance != nil {
+	// 			bots[id][module] = botInstance
+	// 			botInstance.Start(id, prefix)
+	// 		}
+	// 	}
+	// }
+
+	// guildManager := manager.NewGuildManager(session, bots)
+	// guildManager.Start()
+
+	return bots
+}
+
+func handleDiscordSession(discordSession *discordgo.Session) {
+	if err := discordSession.Open(); err != nil {
+		log.Fatal("Error opening Discord session", err)
+		os.Exit(1)
+	}
+	defer discordSession.Close()
 }
